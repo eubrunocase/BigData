@@ -1,0 +1,59 @@
+<section class="chart-card card" aria-labelledby="ranking-titulo">
+  <header class="chart-header">
+    <div>
+      <h2 id="ranking-titulo">Ranking de setores — top 10</h2>
+      <p class="hint">{{ dados()?.rotulo ?? 'Métrica selecionada' }} por seção CNAE.</p>
+    </div>
+    <div class="segmented" role="group" aria-label="Ordenação do ranking">
+      <button
+        type="button"
+        class="chip"
+        [class.ativo]="ordem() === 'desc'"
+        [attr.aria-pressed]="ordem() === 'desc'"
+        (click)="mudarOrdem('desc')"
+      >
+        Maiores
+      </button>
+      <button
+        type="button"
+        class="chip"
+        [class.ativo]="ordem() === 'asc'"
+        [attr.aria-pressed]="ordem() === 'asc'"
+        (click)="mudarOrdem('asc')"
+      >
+        Menores
+      </button>
+    </div>
+  </header>
+
+  @if (carregando()) {
+    <p class="status-line" role="status">Carregando ranking…</p>
+  }
+
+  @if (erro()) {
+    <div class="error-box" role="alert">
+      <p>{{ erro() }}</p>
+      <button type="button" class="btn btn-ghost" (click)="recarregar()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (!carregando() && !erro() && (dados()?.items?.length ?? 0) === 0) {
+    <p class="vazio">Sem dados para os filtros selecionados.</p>
+  }
+
+  <div class="chart-box">
+    <canvas
+      baseChart
+      type="bar"
+      [data]="chartData()"
+      [options]="chartOptions()"
+      aria-label="Gráfico de barras do ranking de setores"
+      role="img"
+    ></canvas>
+  </div>
+
+  <p class="footnote">
+    Barras em magenta indicam valores negativos (saldo). Passe o mouse para ver o volume de
+    movimentações do setor.
+  </p>
+</section>

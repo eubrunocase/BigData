@@ -1,0 +1,64 @@
+<section class="card gap-panel" aria-labelledby="gap-titulo">
+  <header class="gap-header">
+    <div>
+      <h2 id="gap-titulo">Gap salarial por setor</h2>
+      <p class="hint">
+        Apenas setores com pelo menos {{ dados()?.minimo_amostra ?? 30 }} movimentações em cada
+        grupo comparado.
+      </p>
+    </div>
+    <div class="segmented" role="group" aria-label="Tipo de gap salarial">
+      @for (tipo of tipos; track tipo.valor) {
+        <button
+          type="button"
+          class="chip"
+          [class.ativo]="tipoGap() === tipo.valor"
+          [attr.aria-pressed]="tipoGap() === tipo.valor"
+          [attr.title]="tipo.descricao"
+          (click)="selecionar(tipo.valor)"
+        >
+          {{ tipo.rotulo }}
+        </button>
+      }
+    </div>
+  </header>
+
+  @if (carregando()) {
+    <p class="status-line" role="status">Carregando gaps por setor…</p>
+  }
+
+  @if (erro()) {
+    <div class="error-box" role="alert">
+      <p>{{ erro() }}</p>
+      <button type="button" class="btn btn-ghost" (click)="recarregar()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (bloqueado()) {
+    <div class="aviso-nulo" role="status">
+      <strong>n/d</strong>
+      <p>{{ motivoBloqueio() }}</p>
+    </div>
+  } @else if (!carregando() && !erro() && (dados()?.items?.length ?? 0) === 0) {
+    <p class="vazio">Nenhum setor atingiu a amostra mínima neste recorte.</p>
+  } @else if (!bloqueado()) {
+    <div class="chart-box">
+      <canvas
+        baseChart
+        type="bar"
+        [data]="chartData()"
+        [options]="chartOptions()"
+        aria-label="Gráfico de barras do gap salarial por setor"
+        role="img"
+      ></canvas>
+    </div>
+  }
+
+  @if (dados(); as d) {
+    <p class="footnote">
+      Gap = ({{ d.grupo_a }} − {{ d.grupo_b }}) ÷ {{ d.grupo_a }} × 100. Valores positivos indicam
+      que o grupo “{{ d.grupo_a }}” recebe mais; negativos, que o grupo “{{ d.grupo_b }}” recebe
+      mais. Magenta destaca gaps negativos.
+    </p>
+  }
+</section>

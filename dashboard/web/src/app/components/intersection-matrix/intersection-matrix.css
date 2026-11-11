@@ -1,0 +1,83 @@
+.matriz-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.hint,
+.footnote {
+  margin: 0.2rem 0 0;
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.footnote {
+  margin-top: 0.65rem;
+  border-top: 1px dashed var(--borda);
+  padding-top: 0.5rem;
+}
+
+.tabela-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}
+
+th,
+td {
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  padding: 0.4rem 0.35rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+thead th {
+  background: #f8fafc;
+  color: var(--texto-suave);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+tbody th {
+  background: #f8fafc;
+  color: var(--texto);
+  font-weight: 700;
+  text-align: left;
+  white-space: nowrap;
+  padding-left: 0.5rem;
+}
+
+td {
+  min-width: 80px;
+}
+
+td strong {
+  display: block;
+  font-size: 0.76rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+td small {
+  display: block;
+  font-size: 0.62rem;
+  opacity: 0.8;
+  margin-top: 0.1rem;
+}
+
+td.sem-dado {
+  color: #94a3b8;
+  background: #f8fafc;
+}

@@ -1,0 +1,120 @@
+<section class="card tabela-panel" aria-labelledby="tabela-titulo">
+  <header class="tabela-header">
+    <div>
+      <h2 id="tabela-titulo">Tabela de dados do recorte</h2>
+      <p class="hint">
+        @if (linhas().length > 0) {
+          Exibindo {{ formatarNumero(inicioExibido()) }}–{{ formatarNumero(fimExibido()) }} de
+          {{ formatarNumero(linhas().length) }} linhas retornadas. Total no recorte:
+          {{ formatarNumero(totalRecorte()) }} linhas agregadas.
+        } @else {
+          Uma linha por grupo agregado (mês × UF × setor × perfil × tipo).
+        }
+      </p>
+      @if (totalRecorte() > linhas().length) {
+        <p class="hint destaque">
+          A tabela carrega até {{ formatarNumero(limite()) }} linhas (as de maior volume). Refine os
+          filtros para ver o restante.
+        </p>
+      }
+    </div>
+    <button
+      type="button"
+      class="btn"
+      (click)="exportarCsv()"
+      [disabled]="linhasPagina().length === 0"
+      aria-label="Exportar a página visível para CSV"
+    >
+      Exportar CSV desta página
+    </button>
+  </header>
+
+  @if (carregando()) {
+    <p class="status-line" role="status">Carregando tabela…</p>
+  }
+
+  @if (erro()) {
+    <div class="error-box" role="alert">
+      <p>{{ erro() }}</p>
+      <button type="button" class="btn btn-ghost" (click)="recarregar()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (!carregando() && !erro() && linhas().length === 0) {
+    <p class="vazio">Sem linhas para os filtros selecionados.</p>
+  }
+
+  @if (linhas().length > 0) {
+    <div class="tabela-scroll">
+      <table>
+        <caption class="sr-only">
+          Recorte atual com ano, mês, UF, região, setor, sexo, raça/cor, tipo, movimentações,
+          salário médio e idade média
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Ano/mês</th>
+            <th scope="col">UF</th>
+            <th scope="col">Região</th>
+            <th scope="col">Setor</th>
+            <th scope="col">Sexo</th>
+            <th scope="col">Raça/cor</th>
+            <th scope="col">Tipo</th>
+            <th scope="col" class="num">Movimentações</th>
+            <th scope="col" class="num">Salário médio</th>
+            <th scope="col" class="num">Idade média</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (linha of linhasPagina(); track $index) {
+            <tr>
+              <td class="nowrap">{{ linha.mes }}/{{ linha.ano }}</td>
+              <td>{{ linha.uf }}</td>
+              <td class="nowrap">{{ linha.regiao }}</td>
+              <td>
+                <span class="setor-codigo">{{ linha.setor }}</span>
+                <span class="setor-desc" [attr.title]="linha.setor_descricao">
+                  {{ setorTexto(linha) }}
+                </span>
+              </td>
+              <td>{{ linha.sexo }}</td>
+              <td>{{ linha.raca_cor }}</td>
+              <td>{{ linha.tipo }}</td>
+              <td class="num">{{ formatarMovimentacoes(linha.total_movimentacoes) }}</td>
+              <td class="num">{{ formatarValor(linha.salario_medio) }}</td>
+              <td class="num">{{ formatarIdade(linha.idade_media) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <nav class="paginacao" aria-label="Paginação da tabela">
+      <button type="button" class="btn btn-ghost" (click)="irParaPrimeira()" [disabled]="pagina() === 0" aria-label="Primeira página">
+        «
+      </button>
+      <button type="button" class="btn btn-ghost" (click)="paginaAnterior()" [disabled]="pagina() === 0" aria-label="Página anterior">
+        ‹ Anterior
+      </button>
+      <span class="pagina-atual">Página {{ pagina() + 1 }} de {{ totalPaginas() }}</span>
+      <button
+        type="button"
+        class="btn btn-ghost"
+        (click)="proximaPagina()"
+        [disabled]="pagina() >= totalPaginas() - 1"
+        aria-label="Próxima página"
+      >
+        Próxima ›
+      </button>
+      <button
+        type="button"
+        class="btn btn-ghost"
+        (click)="irParaUltima()"
+        [disabled]="pagina() >= totalPaginas() - 1"
+        aria-label="Última página"
+      >
+        »
+      </button>
+    </nav>
+  }
+</section>

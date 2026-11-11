@@ -1,0 +1,18 @@
+# Dependências
+node_modules/
+web/node_modules/
+api/node_modules/
+
+# Credenciais — nunca versionar
+.env
+api/.env
+*.env.local
+
+# Build do Angular
+web/dist/
+web/.angular/
+web/coverage/
+
+# Logs e artefatos locais
+*.log
+.DS_Store

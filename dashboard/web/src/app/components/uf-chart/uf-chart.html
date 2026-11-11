@@ -1,0 +1,49 @@
+<section class="card uf-panel" aria-labelledby="uf-titulo">
+  <header class="uf-header">
+    <div>
+      <h2 id="uf-titulo">Por UF — {{ dados()?.rotulo ?? 'métrica selecionada' }}</h2>
+      <p class="hint">
+        Intensidade da cor proporcional ao valor. O número está sempre visível; a cor é apenas
+        apoio visual.
+      </p>
+    </div>
+    @if (carregando()) {
+      <span class="badge badge-loading" role="status">Atualizando…</span>
+    }
+  </header>
+
+  @if (erro()) {
+    <div class="error-box" role="alert">
+      <p>{{ erro() }}</p>
+      <button type="button" class="btn btn-ghost" (click)="recarregar()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (!carregando() && !erro() && (dados()?.items?.length ?? 0) === 0) {
+    <p class="vazio">Sem dados para os filtros selecionados.</p>
+  }
+
+  <div class="uf-grid">
+    @for (item of dados()?.items ?? []; track item.uf) {
+      <article
+        class="uf-card"
+        [style.background]="estilo(item).background"
+        [style.color]="estilo(item).color"
+        [attr.aria-label]="rotuloAcessivel(item)"
+      >
+        <div class="uf-top">
+          <strong>{{ item.uf }}</strong>
+          <span class="uf-regiao">{{ item.regiao }}</span>
+        </div>
+        <span class="uf-valor">{{ valor(item) }}</span>
+        <span class="uf-volume">{{ volume(item) }}</span>
+      </article>
+    }
+  </div>
+
+  <p class="footnote">
+    “XX” = UF não identificada no CAGED (código mantido pelo ETL). Magenta indica valor negativo
+    (saldo). A escala de cor usa percentis 5–95: outliers extremos (ex.: PB) não achatam o mapa, e
+    os valores exibidos permanecem os originais.
+  </p>
+</section>

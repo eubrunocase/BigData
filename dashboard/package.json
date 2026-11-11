@@ -1,0 +1,16 @@
+{
+  "name": "turnover-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dashboard analítico da dinâmica de emprego formal (Novo CAGED) — Angular + API local",
+  "scripts": {
+    "setup": "npm --prefix api install && npm --prefix web install",
+    "dev": "concurrently -k -n api,web -c blue,green \"npm --prefix api run dev\" \"npm --prefix web run start\"",
+    "start": "npm run dev",
+    "test:api": "npm --prefix api test",
+    "verify:data": "npm --prefix api run verify:data"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

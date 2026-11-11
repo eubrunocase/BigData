@@ -1,0 +1,141 @@
+<section class="kpis" aria-labelledby="kpis-titulo">
+  <div class="kpis-header">
+    <div>
+      <h2 id="kpis-titulo">Indicadores do recorte</h2>
+      @if (kpis(); as k) {
+        <p class="coverage">
+          <strong>{{ formatarNumero(k.cobertura.total_movimentacoes) }}</strong> movimentações ·
+          {{ formatarNumero(k.cobertura.linhas) }} linhas agregadas
+          @if (k.cobertura.amostra_pequena) {
+            <span class="badge badge-warn" role="status">Amostra pequena (&lt; 30)</span>
+          }
+        </p>
+      }
+    </div>
+    @if (carregando()) {
+      <span class="badge badge-loading" role="status">Atualizando…</span>
+    }
+  </div>
+
+  @if (erro()) {
+    <div class="error-box" role="alert">
+      <p>{{ erro() }}</p>
+      <button type="button" class="btn btn-ghost" (click)="recarregar()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (kpis(); as k) {
+    <div class="kpi-grid" [class.is-loading]="carregando()">
+      <article class="kpi-card kpi-teal">
+        <header>
+          <span class="kpi-rotulo">Salário médio ponderado</span>
+          <button
+            type="button"
+            class="info"
+            aria-label="Fórmula do salário médio"
+            title="Média ponderada: Σ(salário médio do grupo × total de movimentações) ÷ Σ(total de movimentações), ignorando salários nulos. Não é a média simples das linhas."
+          >ⓘ</button>
+        </header>
+        <strong class="kpi-valor">{{ formatarMoeda(k.salario_medio) }}</strong>
+        <p class="kpi-sub">Média dos grupos ponderada pelo volume</p>
+      </article>
+
+      <article class="kpi-card kpi-roxo">
+        <header>
+          <span class="kpi-rotulo">Gap salarial de gênero</span>
+          <button
+            type="button"
+            class="info"
+            aria-label="Fórmula do gap de gênero"
+            title="(salário homens − salário mulheres) ÷ salário homens × 100. Calculado ignorando o filtro de sexo; os demais filtros ativos são aplicados. Fica n/d quando há filtro de sexo."
+          >ⓘ</button>
+        </header>
+        <strong class="kpi-valor">{{ valorGap(k.gap_genero) }}</strong>
+        <p class="kpi-sub" [title]="motivoGap(k.gap_genero)">
+          {{ k.gap_genero.grupo_a.rotulo }} {{ formatarMoeda(k.gap_genero.grupo_a.salario) }} ·
+          {{ k.gap_genero.grupo_b.rotulo }} {{ formatarMoeda(k.gap_genero.grupo_b.salario) }}
+        </p>
+      </article>
+
+      <article class="kpi-card kpi-rosa">
+        <header>
+          <span class="kpi-rotulo">Gap salarial racial</span>
+          <button
+            type="button"
+            class="info"
+            aria-label="Fórmula do gap racial"
+            title="(salário pessoas brancas − salário pessoas negras) ÷ salário pessoas brancas × 100. Pessoa negra = preta + parda. Ignora o filtro de raça/cor; demais filtros aplicados."
+          >ⓘ</button>
+        </header>
+        <strong class="kpi-valor">{{ valorGap(k.gap_racial) }}</strong>
+        <p class="kpi-sub" [title]="motivoGap(k.gap_racial)">
+          {{ k.gap_racial.grupo_a.rotulo }} {{ formatarMoeda(k.gap_racial.grupo_a.salario) }} ·
+          {{ k.gap_racial.grupo_b.rotulo }} {{ formatarMoeda(k.gap_racial.grupo_b.salario) }}
+        </p>
+      </article>
+
+      <article class="kpi-card kpi-laranja">
+        <header>
+          <span class="kpi-rotulo">Gap interseccional</span>
+          <button
+            type="button"
+            class="info"
+            aria-label="Fórmula do gap interseccional"
+            title="(salário homens brancos − salário mulheres negras) ÷ salário homens brancos × 100. Ignora os filtros de sexo e raça/cor; demais filtros aplicados. Fica n/d quando um desses filtros está ativo."
+          >ⓘ</button>
+        </header>
+        <strong class="kpi-valor">{{ valorGap(k.gap_interseccional) }}</strong>
+        <p class="kpi-sub" [title]="motivoGap(k.gap_interseccional)">
+          {{ k.gap_interseccional.grupo_a.rotulo }}
+          {{ formatarMoeda(k.gap_interseccional.grupo_a.salario) }} ·
+          {{ k.gap_interseccional.grupo_b.rotulo }}
+          {{ formatarMoeda(k.gap_interseccional.grupo_b.salario) }}
+        </p>
+      </article>
+
+      <article class="kpi-card kpi-azul">
+        <header>
+          <span class="kpi-rotulo">Taxa de rotatividade (proxy)</span>
+          <button
+            type="button"
+            class="info"
+            aria-label="Fórmula da rotatividade"
+            title="Desligamentos ÷ (admissões + desligamentos) × 100. Proxy de participação dos desligamentos no fluxo total; não há estoque de vínculos para calcular o turnover clássico."
+          >ⓘ</button>
+        </header>
+        <strong class="kpi-valor">{{ formatarPercentual(k.rotatividade) }}</strong>
+        <p class="kpi-sub">
+          {{ saldoTexto(k.saldo) }} · razão desl./adm.:
+          {{ formatarRazao(k.razao_desligamento_admissao) }}
+        </p>
+      </article>
+
+      <article class="kpi-card kpi-cinza">
+        <header>
+          <span class="kpi-rotulo">Mulheres negras no fluxo</span>
+          <button
+            type="button"
+            class="info"
+            aria-label="Fórmula da participação de mulheres negras"
+            title="Participação de mulheres negras (pretas + pardas) no total de admissões e no total de desligamentos do recorte filtrado. Se a participação nos desligamentos for maior que nas admissões, o grupo sai proporcionalmente mais do que entra."
+          >ⓘ</button>
+        </header>
+        <div class="split">
+          <span>
+            <small>Admissões</small>
+            <strong>{{ formatarPercentual(k.mulher_negra.participacao_admissoes) }}</strong>
+          </span>
+          <span>
+            <small>Desligamentos</small>
+            <strong>{{ formatarPercentual(k.mulher_negra.participacao_desligamentos) }}</strong>
+          </span>
+        </div>
+        @if (mulheresNegrasSaemMais(k)) {
+          <p class="kpi-sub alerta">Saem proporcionalmente mais do que entram neste recorte.</p>
+        } @else {
+          <p class="kpi-sub">Participação no total de admissões vs. desligamentos.</p>
+        }
+      </article>
+    </div>
+  }
+</section>

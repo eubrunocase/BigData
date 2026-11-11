@@ -1,0 +1,59 @@
+<section class="card drilldown-panel" aria-labelledby="drilldown-titulo">
+  <header class="drilldown-header">
+    <div>
+      <h2 id="drilldown-titulo">Drill-down — {{ dados()?.rotulo_metrica ?? 'métrica selecionada' }}</h2>
+      <p class="hint">{{ nivelRotulo() }}. Clique em uma barra para descer um nível.</p>
+    </div>
+    <button type="button" class="btn btn-ghost" (click)="irParaBrasil()" [disabled]="nivel() === 'regiao'">
+      Voltar ao Brasil
+    </button>
+  </header>
+
+  <nav class="breadcrumb" aria-label="Caminho do drill-down">
+    <button type="button" (click)="irParaBrasil()" [disabled]="nivel() === 'regiao'">Brasil</button>
+    @if (regiao()) {
+      <span aria-hidden="true">›</span>
+      <button type="button" (click)="irParaRegiao()" [disabled]="nivel() === 'uf'">
+        {{ regiao() }}
+      </button>
+    }
+    @if (uf()) {
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">{{ uf() }}</span>
+    }
+  </nav>
+
+  @if (carregando()) {
+    <p class="status-line" role="status">Carregando drill-down…</p>
+  }
+
+  @if (erro()) {
+    <div class="error-box" role="alert">
+      <p>{{ erro() }}</p>
+      <button type="button" class="btn btn-ghost" (click)="recarregar()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (!carregando() && !erro() && (dados()?.items?.length ?? 0) === 0) {
+    <p class="vazio">
+      Sem dados neste nível para os filtros ativos. Volte um nível ou limpe alguns filtros.
+    </p>
+  }
+
+  <div class="chart-box">
+    <canvas
+      baseChart
+      type="bar"
+      [data]="chartData()"
+      [options]="chartOptions()"
+      (chartClick)="onChartClick($event)"
+      aria-label="Gráfico de barras do drill-down por região, UF ou setor"
+      role="img"
+    ></canvas>
+  </div>
+
+  <p class="footnote">
+    Os filtros ativos também são aplicados ao drill-down. Se um nível ficar vazio, volte e ajuste
+    os filtros.
+  </p>
+</section>

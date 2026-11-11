@@ -1,0 +1,63 @@
+<section class="chart-card card" aria-labelledby="serie-titulo">
+  <header class="chart-header">
+    <div>
+      <h2 id="serie-titulo">Série mensal de movimentações</h2>
+      <p class="hint">Evolução de ago/2025 a jan/2026. O tooltip detalha admissões e desligamentos.</p>
+    </div>
+    <div class="segmented" role="group" aria-label="Agrupamento da série mensal">
+      <button
+        type="button"
+        class="chip"
+        [class.ativo]="modo() === 'total'"
+        [attr.aria-pressed]="modo() === 'total'"
+        (click)="trocarModo('total')"
+      >
+        Total
+      </button>
+      <button
+        type="button"
+        class="chip"
+        [class.ativo]="modo() === 'sexo'"
+        [attr.aria-pressed]="modo() === 'sexo'"
+        (click)="trocarModo('sexo')"
+      >
+        Por sexo
+      </button>
+      <button
+        type="button"
+        class="chip"
+        [class.ativo]="modo() === 'raca_cor'"
+        [attr.aria-pressed]="modo() === 'raca_cor'"
+        (click)="trocarModo('raca_cor')"
+      >
+        Por raça/cor
+      </button>
+    </div>
+  </header>
+
+  @if (carregando()) {
+    <p class="status-line" role="status">Carregando série mensal…</p>
+  }
+
+  @if (erro()) {
+    <div class="error-box" role="alert">
+      <p>{{ erro() }}</p>
+      <button type="button" class="btn btn-ghost" (click)="recarregar()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (!carregando() && !erro() && chartData().datasets.length === 0) {
+    <p class="vazio">Sem dados para os filtros selecionados.</p>
+  }
+
+  <div class="chart-box">
+    <canvas
+      baseChart
+      type="line"
+      [data]="chartData()"
+      [options]="chartOptions()"
+      aria-label="Gráfico de linha da série mensal de movimentações"
+      role="img"
+    ></canvas>
+  </div>
+</section>

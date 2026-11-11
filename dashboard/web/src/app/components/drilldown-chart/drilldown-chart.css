@@ -1,0 +1,62 @@
+.drilldown-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.hint,
+.footnote {
+  margin: 0.2rem 0 0;
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.footnote {
+  margin-top: 0.65rem;
+  border-top: 1px dashed var(--borda);
+  padding-top: 0.5rem;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin: 0.2rem 0 0.7rem;
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.breadcrumb button {
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  font: inherit;
+  font-weight: 600;
+  padding: 0.1rem 0.15rem;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.breadcrumb button:disabled {
+  color: var(--texto);
+  cursor: default;
+}
+
+.breadcrumb button:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 1px;
+}
+
+.chart-box {
+  position: relative;
+  height: 360px;
+}

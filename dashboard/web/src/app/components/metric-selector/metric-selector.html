@@ -1,0 +1,30 @@
+<section class="metric-selector card" aria-labelledby="metrica-titulo">
+  <div class="metrica-header">
+    <div>
+      <h2 id="metrica-titulo">Métrica dos gráficos</h2>
+      <p class="hint">
+        Controla o ranking de setores, o mapa por UF, a matriz interseccional e o drill-down. A
+        série mensal tem controle próprio de agrupamento.
+      </p>
+    </div>
+    <span class="atual">Selecionada: <strong>{{ rotuloAtual() }}</strong></span>
+  </div>
+
+  <div class="segmented" role="group" aria-label="Selecionar métrica dos gráficos">
+    @for (metrica of metricas; track metrica.valor) {
+      <button
+        type="button"
+        class="chip"
+        [class.ativo]="store.metrica() === metrica.valor"
+        [attr.aria-pressed]="store.metrica() === metrica.valor"
+        (click)="selecionar(metrica.valor)"
+      >
+        {{ metrica.rotulo }}
+      </button>
+    }
+  </div>
+
+  <p class="footnote">
+    Mediana não está disponível: a base só possui médias por grupo, não os valores individuais.
+  </p>
+</section>

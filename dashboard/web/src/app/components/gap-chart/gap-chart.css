@@ -1,0 +1,81 @@
+.gap-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.7rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.hint,
+.footnote {
+  margin: 0.2rem 0 0;
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.footnote {
+  margin-top: 0.65rem;
+  border-top: 1px dashed var(--borda);
+  padding-top: 0.5rem;
+}
+
+.segmented {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--texto);
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.65rem;
+  cursor: pointer;
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.chip.ativo {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+  font-weight: 600;
+}
+
+.chart-box {
+  position: relative;
+  height: 430px;
+}
+
+.aviso-nulo {
+  border: 1px dashed var(--borda);
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 1rem;
+  color: var(--texto-suave);
+  font-size: 0.83rem;
+  margin-top: 0.6rem;
+}
+
+.aviso-nulo strong {
+  display: block;
+  color: var(--texto);
+  font-size: 1.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.aviso-nulo p {
+  margin: 0;
+}

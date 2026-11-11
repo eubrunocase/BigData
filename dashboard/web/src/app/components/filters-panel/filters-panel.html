@@ -1,0 +1,140 @@
+<section class="filters card" aria-labelledby="filtros-titulo">
+  <div class="filters-header">
+    <div>
+      <h2 id="filtros-titulo">Filtros do recorte</h2>
+      <p class="hint">Qualquer mudança atualiza todos os indicadores e gráficos.</p>
+    </div>
+    <button
+      type="button"
+      class="btn btn-ghost"
+      (click)="store.limpar()"
+      [disabled]="!store.temFiltrosAtivos()"
+      aria-label="Limpar todos os filtros"
+    >
+      Limpar filtros
+    </button>
+  </div>
+
+  @if (store.carregandoMeta()) {
+    <p class="status-line" role="status">Carregando valores dos filtros…</p>
+  }
+
+  @if (store.metaError()) {
+    <p class="error-inline" role="alert">{{ store.metaError() }}</p>
+  }
+
+  @if (store.meta(); as meta) {
+    <div class="filters-grid">
+      <label class="field">
+        <span>Ano</span>
+        <select [value]="store.filtros().ano ?? ''" (change)="onAno($event)" aria-label="Filtrar por ano">
+          <option value="">Todos os anos</option>
+          @for (ano of meta.anos; track ano) {
+            <option [value]="ano">{{ ano }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Mês</span>
+        <select [value]="store.filtros().mes ?? ''" (change)="onMes($event)" aria-label="Filtrar por mês">
+          <option value="">Todos os meses</option>
+          @for (mes of meta.meses_rotulos; track mes.mes) {
+            <option [value]="mes.mes">{{ mes.rotulo }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Região</span>
+        <select [value]="store.filtros().regiao ?? ''" (change)="onRegiao($event)" aria-label="Filtrar por região">
+          <option value="">Todas as regiões</option>
+          @for (regiao of meta.regioes; track regiao) {
+            <option [value]="regiao">{{ regiao }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>UF</span>
+        <select
+          [value]="store.filtros().uf ?? ''"
+          (change)="onUf($event)"
+          aria-label="Filtrar por unidade federativa"
+          [attr.disabled]="store.ufsDisponiveis().length === 0 ? true : null"
+        >
+          <option value="">
+            {{ store.filtros().regiao ? 'Todas as UFs da região' : 'Todas as UFs' }}
+          </option>
+          @for (uf of store.ufsDisponiveis(); track uf.sigla) {
+            <option [value]="uf.sigla">{{ uf.sigla }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field field-wide">
+        <span>Setor (CNAE seção)</span>
+        <select [value]="store.filtros().setor ?? ''" (change)="onSetor($event)" aria-label="Filtrar por setor">
+          <option value="">Todos os setores</option>
+          @for (setor of meta.setores; track setor.cnae_2_secao) {
+            <option [value]="setor.cnae_2_secao">
+              {{ setor.cnae_2_secao }} — {{ setor.setor_descricao || 'Sem descrição' }}
+            </option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Sexo</span>
+        <select [value]="store.filtros().sexo ?? ''" (change)="onSexo($event)" aria-label="Filtrar por sexo">
+          <option value="">Todos</option>
+          @for (sexo of meta.sexos; track sexo) {
+            <option [value]="sexo">{{ sexo }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Raça/cor</span>
+        <select [value]="store.filtros().raca_cor ?? ''" (change)="onRaca($event)" aria-label="Filtrar por raça ou cor">
+          <option value="">Todas</option>
+          @for (raca of meta.racas; track raca) {
+            <option [value]="raca">{{ raca }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>
+          Faixa etária
+          <button
+            type="button"
+            class="info"
+            aria-label="Sobre o filtro de faixa etária"
+            title="Aproximação: a base só possui a idade média de cada grupo, não a idade individual. O filtro seleciona grupos cuja idade média cai na faixa."
+          >ⓘ</button>
+        </span>
+        <select [value]="store.filtros().faixa ?? ''" (change)="onFaixa($event)" aria-label="Filtrar por faixa etária aproximada">
+          <option value="">Todas as idades</option>
+          @for (faixa of meta.faixas_etarias; track faixa.valor) {
+            <option [value]="faixa.valor">{{ faixa.rotulo }} (média do grupo)</option>
+          }
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Tipo de movimentação</span>
+        <select [value]="store.filtros().tipo" (change)="onTipo($event)" aria-label="Filtrar por tipo de movimentação">
+          <option value="todas">Todas</option>
+          <option value="admissao">Admissão</option>
+          <option value="desligamento">Desligamento</option>
+        </select>
+      </label>
+    </div>
+
+    <p class="footnote">
+      Faixa etária é aproximada (idade média do grupo). O filtro de tipo usa a classificação
+      “começa com Admiss” = admissão; os demais tipos são desligamentos.
+    </p>
+  }
+</section>

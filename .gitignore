@@ -1,0 +1,29 @@
+# Infraestrutura
+terraform.tfvars
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Credenciais — nunca versionar (apenas .env.example)
+**/.env
+**/.env.local
+etl/.env
+
+# Node / Angular
+node_modules/
+**/node_modules/
+dashboard/web/dist/
+dashboard/web/.angular/
+dashboard/web/coverage/
+npm-debug.log*
+
+# Python
+etl/venv/
+etl/__pycache__/
+*.pyc
+
+# Sistema / editores
+.DS_Store
+*.log
+spec**

@@ -1,0 +1,67 @@
+<section class="card matriz-panel" aria-labelledby="matriz-titulo">
+  <header class="matriz-header">
+    <div>
+      <h2 id="matriz-titulo">Matriz interseccional sexo × raça/cor</h2>
+      <p class="hint">
+        {{ dados()?.rotulo ?? 'Métrica selecionada' }} por célula. A cor reforça a intensidade; o
+        valor e o volume estão sempre escritos.
+      </p>
+    </div>
+    @if (carregando()) {
+      <span class="badge badge-loading" role="status">Atualizando…</span>
+    }
+  </header>
+
+  @if (erro()) {
+    <div class="error-box" role="alert">
+      <p>{{ erro() }}</p>
+      <button type="button" class="btn btn-ghost" (click)="recarregar()">Tentar novamente</button>
+    </div>
+  }
+
+  @if (!carregando() && !erro() && (dados()?.celulas?.length ?? 0) === 0) {
+    <p class="vazio">Sem dados para os filtros selecionados.</p>
+  }
+
+  <div class="tabela-scroll">
+    <table>
+      <caption class="sr-only">
+        Matriz de sexo por raça/cor com a métrica selecionada e o volume de movimentações
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Sexo</th>
+          @for (raca of dados()?.racas ?? []; track raca) {
+            <th scope="col">{{ raca }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (sexo of dados()?.sexos ?? []; track sexo) {
+          <tr>
+            <th scope="row">{{ sexo }}</th>
+            @for (raca of dados()?.racas ?? []; track raca) {
+              @if (mapa().get(sexo + '|' + raca); as celula) {
+                <td
+                  [style.background]="estilo(celula).background"
+                  [style.color]="estilo(celula).color"
+                  [attr.title]="titulo(celula)"
+                >
+                  <strong>{{ valor(celula) }}</strong>
+                  <small>{{ volume(celula) }}</small>
+                </td>
+              } @else {
+                <td class="sem-dado">—</td>
+              }
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="footnote">
+    Células sem movimentações no recorte aparecem como “—”. Grupos pequenos podem ser instáveis;
+    consulte o aviso de amostra pequena nos indicadores.
+  </p>
+</section>

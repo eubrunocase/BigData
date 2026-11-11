@@ -1,0 +1,68 @@
+<a class="skip-link" href="#conteudo">Pular para o conteúdo principal</a>
+
+<header class="topo">
+  <div class="topo-inner">
+    <div class="marca">
+      <span class="eyebrow">Big Data e Analytics · ODS 5 e ODS 18</span>
+      <h1>Dinâmica de Emprego Formal e Turnover Setorial</h1>
+      <p class="subtitulo">
+        Novo CAGED (MTE) · Brasil · {{ store.periodoLabel() }} · recorte interseccional de gênero e
+        raça/cor
+      </p>
+    </div>
+
+    <div class="topo-status">
+      <span class="periodo">
+        <span class="periodo-rotulo">Período dos dados</span>
+        <strong>{{ store.periodoLabel() }}</strong>
+      </span>
+      <span
+        class="badge"
+        [class.badge-ok]="apiOnline() === true"
+        [class.badge-off]="apiOnline() === false"
+        [class.badge-loading]="apiOnline() === null"
+        role="status"
+        aria-live="polite"
+      >
+        @if (apiOnline() === true) {
+          ● API conectada · banco OK
+        } @else if (apiOnline() === false) {
+          ● API indisponível
+        } @else {
+          ● Verificando API…
+        }
+      </span>
+    </div>
+  </div>
+</header>
+
+<main id="conteudo" class="container app-main">
+  <app-caveats-banner />
+
+  <app-filters-panel />
+
+  <app-kpi-cards />
+
+  <app-metric-selector />
+
+  <div class="charts-grid">
+    <app-monthly-chart class="span-2" />
+    <app-sector-ranking />
+    <app-uf-chart />
+    <app-intersection-matrix />
+    <app-gap-chart />
+    <app-drilldown-chart class="span-2" />
+    <app-data-table class="span-2" />
+  </div>
+
+  <footer class="rodape">
+    <p>
+      Fonte: Novo CAGED (MTE) via Base dos Dados, agregado por mês, UF, seção CNAE, sexo, raça/cor e
+      tipo de movimentação. Dashboard local — nenhum dado é enviado a terceiros.
+    </p>
+    <p>
+      Salário e idade são médias ponderadas por volume. A base não permite mediana nem taxa clássica
+      de turnover (não há estoque de vínculos). Consulte as ressalvas no topo.
+    </p>
+  </footer>
+</main>

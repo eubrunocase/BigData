@@ -1,0 +1,51 @@
+<section class="caveats" aria-labelledby="ressalvas-titulo">
+  <button
+    type="button"
+    class="caveats-toggle"
+    (click)="toggle()"
+    [attr.aria-expanded]="aberto()"
+    aria-controls="ressalvas-conteudo"
+  >
+    <span class="caveats-icon" aria-hidden="true">⚠</span>
+    <span id="ressalvas-titulo">Ressalvas e limitações dos dados</span>
+    <span class="caveats-chevron" aria-hidden="true">{{ aberto() ? '−' : '+' }}</span>
+  </button>
+
+  @if (aberto()) {
+    <div class="caveats-body" id="ressalvas-conteudo">
+      <ul>
+        <li>
+          <strong>Código 97 assumido como admissão.</strong> Cerca de metade dos registros brutos
+          veio do código 97, não documentado no dicionário oficial. O ETL preencheu esses valores
+          como “Admissão” por inferência, <em>sem confirmação oficial</em>. Leia admissões e
+          indicadores derivados com essa ressalva.
+        </li>
+        <li>
+          <strong>Somente médias por grupo.</strong> A base agregada não permite calcular mediana
+          (nem desvio-padrão individual). Salário e idade são médias ponderadas por
+          <code>total_movimentacoes</code>; a mediana não é oferecida.
+        </li>
+        <li>
+          <strong>Faixa etária aproximada.</strong> O filtro usa a <em>idade média do grupo</em>,
+          não a idade de cada trabalhador. Grupos com idade média fora da faixa são excluídos.
+        </li>
+        <li>
+          <strong>Rotatividade é proxy.</strong> Não há estoque de vínculos na base. A taxa exibida
+          é <code>desligamentos / (admissões + desligamentos)</code>, ou seja, a participação dos
+          desligamentos no fluxo total — não a taxa clássica de turnover.
+        </li>
+        <li>
+          <strong>Grupos pequenos e LGPD.</strong> Recortes com menos de 30 movimentações exibem
+          aviso de amostra pequena (risco de reidentificação e instabilidade estatística). Evite
+          conclusões sobre grupos muito reduzidos.
+        </li>
+        <li>
+          <strong>Outliers de salário.</strong> Há registros com média implausível (5 acima de
+          R$ 1 milhão; o maior, na PB, tem média de R$ 6,46 milhões em 3.144 movimentações). Eles
+          não são removidos para preservar o dado de origem, mas inflam médias de UFs e setores.
+          A escala de cor do mapa usa percentis 5–95 para reduzir o efeito visual.
+        </li>
+      </ul>
+    </div>
+  }
+</section>

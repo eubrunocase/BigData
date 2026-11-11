@@ -1,0 +1,64 @@
+.caveats {
+  border: 1px solid #f0c36a;
+  background: #fffbeb;
+  border-radius: var(--raio);
+  overflow: hidden;
+}
+
+.caveats-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 0;
+  background: transparent;
+  color: #7c4a03;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  cursor: pointer;
+}
+
+.caveats-toggle:hover {
+  background: #fef3c7;
+}
+
+.caveats-toggle:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: -2px;
+}
+
+.caveats-icon {
+  font-size: 1rem;
+}
+
+.caveats-chevron {
+  margin-left: auto;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.caveats-body {
+  border-top: 1px dashed #e7b64f;
+  padding: 0.2rem 1.1rem 0.75rem;
+  color: #5f4308;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.caveats-body ul {
+  margin: 0.45rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.caveats-body li + li {
+  margin-top: 0.45rem;
+}
+
+.caveats-body code {
+  background: #fdecc1;
+  border-radius: 3px;
+  padding: 0.05rem 0.25rem;
+}

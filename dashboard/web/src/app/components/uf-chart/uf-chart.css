@@ -1,0 +1,79 @@
+.uf-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.hint,
+.footnote {
+  margin: 0.2rem 0 0;
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.footnote {
+  margin-top: 0.65rem;
+  border-top: 1px dashed var(--borda);
+  padding-top: 0.5rem;
+}
+
+.uf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(116px, 1fr));
+  gap: 0.45rem;
+}
+
+.uf-card {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 7px;
+  padding: 0.45rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.uf-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+.uf-top strong {
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+}
+
+.uf-regiao {
+  font-size: 0.62rem;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.uf-valor {
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.uf-volume {
+  font-size: 0.65rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+  .uf-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+}
